@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Shakti Boutique</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Shakti Boutique</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="products.html">Ready-made Kurtis</a></li>
+                <li><a href="booking.html">Booking</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="welcome">
+        <div class="container">
+            <h1>Ready-Made Kurtis Collection</h1>
+            <p>Shop our beautiful collection of ready-to-wear kurtis</p>
+        </div>
+    </section>
+
+    <section class="container" style="padding: 2rem 0;">
+        <div class="product-grid" id="productsGrid">
+            <!-- Products will be loaded here -->
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Shakti Boutique. All rights reserved.</p>
+            <p>Phone: 9795478483</p>
+        </div>
+    </footer>
+
+    <script>
+        // Default products data
+        const defaultProducts = [
+            {
+                id: 1,
+                name: "Embroidered Kurti - Red",
+                price: "₹450",
+                size: "S, M, L, XL",
+                description: "Beautiful red kurti with traditional embroidery",
+                image: "👗"
+            },
+            {
+                id: 2,
+                name: "Cotton Kurti - Blue",
+                price: "₹350",
+                size: "S, M, L, XL",
+                description: "Comfortable cotton kurti perfect for daily wear",
+                image: "👕"
+            },
+            {
+                id: 3,
+                name: "Printed Kurti - Green",
+                price: "₹400",
+                size: "S, M, L, XL",
+                description: "Trendy printed kurti with floral design",
+                image: "🌸"
+            },
+            {
+                id: 4,
+                name: "Silk Blend Kurti - Golden",
+                price: "₹550",
+                size: "S, M, L, XL",
+                description: "Premium silk blend kurti for special occasions",
+                image: "✨"
+            },
+            {
+                id: 5,
+                name: "Palazzo Set - Purple",
+                price: "₹650",
+                size: "S, M, L, XL",
+                description: "Elegant palazzo set with matching dupatta",
+                image: "👑"
+            },
+            {
+                id: 6,
+                name: "Designer Kurti - Maroon",
+                price: "₹500",
+                size: "S, M, L, XL",
+                description: "Designer kurti with intricate details",
+                image: "💎"
+            }
+        ];
+
+        function loadProducts() {
+            const productsGrid = document.getElementById('productsGrid');
+            const products = JSON.parse(localStorage.getItem('products')) || defaultProducts;
+            
+            productsGrid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">${product.image}</div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <div class="product-price">${product.price}</div>
+                        <p style="color: #999; font-size: 0.9rem;">Sizes: ${product.size}</p>
+                        <p class="product-description">${product.description}</p>
+                        <button class="btn" onclick="alert('Please call 9795478483 to order')">Order Now</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        loadProducts();
+    </script>
+</body>
+</html>

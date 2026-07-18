@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Shakti Boutique</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Shakti Boutique</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="products.html">Ready-made Kurtis</a></li>
+                <li><a href="booking.html">Booking</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="welcome">
+        <div class="container">
+            <h1>Contact Us</h1>
+            <p>Get in touch with Shakti Boutique</p>
+        </div>
+    </section>
+
+    <section class="container">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+            <div>
+                <h2 style="color: #c91c6d; margin-bottom: 1rem;">Contact Information</h2>
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <p style="margin: 1rem 0;">
+                        <strong>📞 Phone:</strong> 9795478483
+                    </p>
+                    <p style="margin: 1rem 0;">
+                        <strong>📍 Address:</strong><br>
+                        Shahpur-Kothi,<br>
+                        Civil Line,<br>
+                        Lakhimpur (Kheri),<br>
+                        Uttar Pradesh
+                    </p>
+                    <p style="margin: 1rem 0;">
+                        <strong>⏰ Working Hours:</strong><br>
+                        Monday - Saturday: 9:00 AM - 8:00 PM<br>
+                        Sunday: 10:00 AM - 6:00 PM
+                    </p>
+                    <p style="margin-top: 2rem;">
+                        <a href="https://wa.me/9795478483" class="btn" style="display: inline-block; text-decoration: none;">Chat on WhatsApp</a>
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <h2 style="color: #c91c6d; margin-bottom: 1rem;">Send us a Message</h2>
+                <form onsubmit="handleSubmit(event)">
+                    <label>Name *</label>
+                    <input type="text" id="name" required>
+
+                    <label>Phone *</label>
+                    <input type="tel" id="phone" required>
+
+                    <label>Email</label>
+                    <input type="email" id="email">
+
+                    <label>Service Interest *</label>
+                    <select id="service" required>
+                        <option value="">Select a service</option>
+                        <option value="Custom Tailoring">Custom Tailoring</option>
+                        <option value="Ready-made Kurtis">Ready-made Kurtis</option>
+                        <option value="Alterations">Alterations</option>
+                        <option value="Other">Other Inquiry</option>
+                    </select>
+
+                    <label>Message *</label>
+                    <textarea id="message" required></textarea>
+
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Shakti Boutique. All rights reserved.</p>
+            <p>Phone: 9795478483</p>
+        </div>
+    </footer>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const service = document.getElementById('service').value;
+            const message = document.getElementById('message').value;
+            
+            // Store in localStorage
+            let inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
+            inquiries.push({
+                id: Date.now(),
+                name,
+                phone,
+                email,
+                service,
+                message,
+                date: new Date().toLocaleString()
+            });
+            localStorage.setItem('inquiries', JSON.stringify(inquiries));
+            
+            alert('Thank you for your inquiry! We will contact you soon.');
+            document.querySelector('form').reset();
+        }
+    </script>
+</body>
+</html>

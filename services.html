@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Shakti Boutique</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Shakti Boutique</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="products.html">Ready-made Kurtis</a></li>
+                <li><a href="booking.html">Booking</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="welcome">
+        <div class="container">
+            <h1>Our Custom Tailoring Services</h1>
+            <p>Expert tailoring for all your fashion needs</p>
+        </div>
+    </section>
+
+    <section class="container" style="padding: 2rem 0;">
+        <div class="product-grid" id="servicesGrid">
+            <!-- Services will be loaded here -->
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Shakti Boutique. All rights reserved.</p>
+            <p>Phone: 9795478483</p>
+        </div>
+    </footer>
+
+    <script>
+        // Default services data
+        const defaultServices = [
+            {
+                id: 1,
+                name: "Indian Suit (Salwar Kameez)",
+                price: "₹500 - ₹1200",
+                description: "Custom tailored Indian suits with perfect fit. Choose from various fabrics and designs.",
+                image: "👗"
+            },
+            {
+                id: 2,
+                name: "Blouse Stitching",
+                price: "₹300 - ₹600",
+                description: "Expert blouse stitching with trendy designs. Back designs, boat neck, deep neck, etc.",
+                image: "👚"
+            },
+            {
+                id: 3,
+                name: "Saree Stitching",
+                price: "₹400 - ₹800",
+                description: "Professional saree stitching and fitting. We handle all types of sarees.",
+                image: "🧣"
+            },
+            {
+                id: 4,
+                name: "Alterations",
+                price: "₹200 - ₹500",
+                description: "Expert alterations for perfect fit. Hemming, taking in/letting out, etc.",
+                image: "✂️"
+            },
+            {
+                id: 5,
+                name: "Lehenga Stitching",
+                price: "₹800 - ₹2000",
+                description: "Beautiful custom lehengas for special occasions.",
+                image: "👑"
+            },
+            {
+                id: 6,
+                name: "Ethnic Wear",
+                price: "₹600 - ₹1500",
+                description: "Custom ethnic wear including kurtis, palazzo sets, and more.",
+                image: "🎨"
+            }
+        ];
+
+        function loadServices() {
+            const servicesGrid = document.getElementById('servicesGrid');
+            const services = JSON.parse(localStorage.getItem('services')) || defaultServices;
+            
+            servicesGrid.innerHTML = services.map(service => `
+                <div class="product-card">
+                    <div class="product-image">${service.image}</div>
+                    <div class="product-info">
+                        <h3>${service.name}</h3>
+                        <div class="product-price">${service.price}</div>
+                        <p class="product-description">${service.description}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        loadServices();
+    </script>
+</body>
+</html>

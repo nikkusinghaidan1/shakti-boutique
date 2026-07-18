@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking & Measurements - Shakti Boutique</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Shakti Boutique</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="products.html">Ready-made Kurtis</a></li>
+                <li><a href="booking.html">Booking</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="welcome">
+        <div class="container">
+            <h1>📋 Booking & Measurements</h1>
+            <p>Get your custom tailoring done with precise measurements</p>
+        </div>
+    </section>
+
+    <section class="container">
+        <div style="max-width: 700px; margin: 2rem auto;">
+            <div style="background: #fff3cd; padding: 1rem; border-radius: 5px; margin-bottom: 2rem;">
+                <strong>📝 Instructions:</strong> सभी माप सेंटीमीटर (cm) में दें। ढीले कपड़े पहनकर माप लें।
+            </div>
+
+            <form onsubmit="handleBooking(event)" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <!-- Personal Details -->
+                <h2 style="color: #c91c6d; margin-bottom: 1.5rem; border-bottom: 2px solid #c91c6d; padding-bottom: 0.5rem;">👤 Personal Details</h2>
+
+                <label>Name *</label>
+                <input type="text" id="bookingName" placeholder="आपका नाम" required>
+
+                <label>Phone Number *</label>
+                <input type="tel" id="bookingPhone" placeholder="9795478483" required>
+
+                <label>Email</label>
+                <input type="email" id="bookingEmail" placeholder="optional">
+
+                <label>Service Type *</label>
+                <select id="serviceType" required>
+                    <option value="">-- Select Service --</option>
+                    <option value="Indian Suit (Salwar Kameez)">Indian Suit (Salwar Kameez)</option>
+                    <option value="Blouse Stitching">Blouse Stitching</option>
+                    <option value="Saree Stitching">Saree Stitching</option>
+                    <option value="Lehenga">Lehenga</option>
+                    <option value="Ethnic Wear">Ethnic Wear (Kurti/Palazzo)</option>
+                    <option value="Alterations">Alterations</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <!-- Measurements Section -->
+                <h2 style="color: #c91c6d; margin: 2rem 0 1.5rem 0; border-bottom: 2px solid #c91c6d; padding-bottom: 0.5rem;">📏 Body Measurements (cm में)</h2>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>👕 Gala (Neck) *</label>
+                        <input type="number" id="neck" step="0.5" placeholder="e.g., 32" required>
+                        <small style="color: #999;">गले का चारों ओर</small>
+                    </div>
+
+                    <div>
+                        <label>👚 Chati (Bust/Chest) *</label>
+                        <input type="number" id="chest" step="0.5" placeholder="e.g., 86" required>
+                        <small style="color: #999;">सीने के सबसे चौड़े हिस्से से</small>
+                    </div>
+
+                    <div>
+                        <label>👖 Kamar (Waist) *</label>
+                        <input type="number" id="waist" step="0.5" placeholder="e.g., 72" required>
+                        <small style="color: #999;">कमर के चारों ओर</small>
+                    </div>
+
+                    <div>
+                        <label>🍑 Hip *</label>
+                        <input type="number" id="hip" step="0.5" placeholder="e.g., 92" required>
+                        <small style="color: #999;">हिप्स के सबसे चौड़े हिस्से से</small>
+                    </div>
+
+                    <div>
+                        <label>💪 Asteen (Sleeve) *</label>
+                        <input type="number" id="sleeve" step="0.5" placeholder="e.g., 58" required>
+                        <small style="color: #999;">कंधे से कलाई तक</small>
+                    </div>
+
+                    <div>
+                        <label>📐 Length (Lambi) *</label>
+                        <input type="number" id="length" step="0.5" placeholder="e.g., 100" required>
+                        <small style="color: #999;">कंधे से पैर तक</small>
+                    </div>
+
+                    <div>
+                        <label>👕 Shoulder</label>
+                        <input type="number" id="shoulder" step="0.5" placeholder="e.g., 38">
+                        <small style="color: #999;">कंधे की चौड़ाई (optional)</small>
+                    </div>
+
+                    <div>
+                        <label>✂️ Armhole</label>
+                        <input type="number" id="armhole" step="0.5" placeholder="e.g., 20">
+                        <small style="color: #999;">बाजू का छेद (optional)</small>
+                    </div>
+                </div>
+
+                <!-- Additional Notes -->
+                <h2 style="color: #c91c6d; margin: 2rem 0 1.5rem 0; border-bottom: 2px solid #c91c6d; padding-bottom: 0.5rem;">📝 Additional Details</h2>
+
+                <label>Design/Style Preference</label>
+                <textarea id="designPreference" placeholder="e.g., Modern design, traditional look, back design, etc." style="min-height: 80px;"></textarea>
+
+                <label>Special Instructions</label>
+                <textarea id="specialInstructions" placeholder="e.g., Any specific requirements, fabric preferences, etc." style="min-height: 80px;"></textarea>
+
+                <label>Preferred Delivery Date</label>
+                <input type="date" id="deliveryDate">
+
+                <!-- Consent -->
+                <div style="background: #f0f0f0; padding: 1rem; border-radius: 5px; margin: 1.5rem 0;">
+                    <input type="checkbox" id="consent" required>
+                    <label for="consent" style="display: inline; margin-left: 0.5rem;">
+                        मैं अपनी जानकारी और माप को Shakti Boutique के साथ साझा करने के लिए सहमत हूँ।
+                    </label>
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; padding: 12px; font-size: 1.1rem;">📤 Submit Booking</button>
+            </form>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: #f9f9f9; border-radius: 8px;">
+                <h3 style="color: #c91c6d; margin-bottom: 1rem;">ℹ️ माप लेने के टिप्स:</h3>
+                <ul style="color: #666; line-height: 1.8;">
+                    <li>✅ ढीले कपड़े पहनकर माप लें</li>
+                    <li>✅ मापते समय सीधे खड़े रहें</li>
+                    <li>✅ मेजरटेप को ढीला रखें, बहुत तंग न करें</li>
+                    <li>✅ सभी माप सेंटीमीटर (cm) में दें</li>
+                    <li>✅ अगर कोई माप समझ न आए तो कॉल करें: 9795478483</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Shakti Boutique. All rights reserved.</p>
+            <p>Phone: 9795478483</p>
+        </div>
+    </footer>
+
+    <script>
+        function handleBooking(event) {
+            event.preventDefault();
+
+            const booking = {
+                id: Date.now(),
+                name: document.getElementById('bookingName').value,
+                phone: document.getElementById('bookingPhone').value,
+                email: document.getElementById('bookingEmail').value,
+                serviceType: document.getElementById('serviceType').value,
+                measurements: {
+                    neck: document.getElementById('neck').value,
+                    chest: document.getElementById('chest').value,
+                    waist: document.getElementById('waist').value,
+                    hip: document.getElementById('hip').value,
+                    sleeve: document.getElementById('sleeve').value,
+                    length: document.getElementById('length').value,
+                    shoulder: document.getElementById('shoulder').value || 'N/A',
+                    armhole: document.getElementById('armhole').value || 'N/A'
+                },
+                designPreference: document.getElementById('designPreference').value,
+                specialInstructions: document.getElementById('specialInstructions').value,
+                deliveryDate: document.getElementById('deliveryDate').value,
+                date: new Date().toLocaleString('en-IN')
+            };
+
+            // Save to localStorage
+            let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            bookings.push(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+
+            // Create WhatsApp message
+            const whatsappMessage = `Namaste! मेरा नाम ${booking.name} है।\n\n📋 Service: ${booking.serviceType}\n\n📏 मेरे माप:\n- Gala (Neck): ${booking.measurements.neck} cm\n- Chati (Chest): ${booking.measurements.chest} cm\n- Kamar (Waist): ${booking.measurements.waist} cm\n- Hip: ${booking.measurements.hip} cm\n- Asteen (Sleeve): ${booking.measurements.sleeve} cm\n- Length: ${booking.measurements.length} cm\n\nकृपया मेरे लिए कोट दें।`;
+
+            const whatsappLink = `https://wa.me/919795478483?text=${encodeURIComponent(whatsappMessage)}`;
+
+            alert('✅ Booking submitted successfully!\n\nहम आपसे जल्द ही संपर्क करेंगे।\n\nआप WhatsApp पर भी अपनी बुकिंग शेयर कर सकते हैं।');
+            
+            // Redirect to WhatsApp (optional)
+            setTimeout(() => {
+                window.open(whatsappLink, '_blank');
+            }, 1000);
+
+            document.querySelector('form').reset();
+        }
+    </script>
+</body>
+</html>

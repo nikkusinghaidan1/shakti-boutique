@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Shakti Boutique</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="loginPage" class="login-page">
+        <div style="max-width: 400px; margin: 100px auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center; color: #c91c6d; margin-bottom: 2rem;">Admin Login</h2>
+            <form onsubmit="handleLogin(event)">
+                <label>Username *</label>
+                <input type="text" id="username" placeholder="Enter username" required>
+
+                <label style="margin-top: 1rem;">Password *</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+
+                <button type="submit" class="btn" style="margin-top: 2rem; width: 100%;">Login</button>
+            </form>
+            <p style="text-align: center; color: #666; margin-top: 1rem; font-size: 0.9rem;">
+                Demo Credentials:<br>
+                Username: SHAKTI<br>
+                Password: BOMB_JATT_123
+            </p>
+        </div>
+    </div>
+
+    <div id="adminPage" style="display: none;">
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">Shakti Boutique - Admin</div>
+                <button class="btn" onclick="handleLogout()" style="background: #e74c3c;">Logout</button>
+            </div>
+        </nav>
+
+        <div class="admin-container">
+            <h1 style="color: #c91c6d; margin: 2rem 0;">Admin Dashboard</h1>
+
+            <!-- Services Section -->
+            <div class="section-title">🧵 Manage Services</div>
+            <button class="btn" onclick="openServiceModal()">+ Add New Service</button>
+            <table class="admin-table" id="servicesTable">
+                <thead>
+                    <tr>
+                        <th>Service Name</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="servicesTableBody">
+                </tbody>
+            </table>
+
+            <!-- Products Section -->
+            <div class="section-title">👗 Manage Ready-Made Kurtis</div>
+            <button class="btn" onclick="openProductModal()">+ Add New Product</button>
+            <table class="admin-table" id="productsTable">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Sizes</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                </tbody>
+            </table>
+
+            <!-- Bookings Section -->
+            <div class="section-title">📋 Customer Bookings</div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Service</th>
+                        <th>Measurements</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="bookingsTableBody">
+                </tbody>
+            </table>
+
+            <!-- Inquiries Section -->
+            <div class="section-title">📞 Customer Inquiries</div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Service</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="inquiriesTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="serviceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeServiceModal()">&times;</span>
+            <h2 style="color: #c91c6d; margin-bottom: 1rem;">Add/Edit Service</h2>
+            <form onsubmit="handleSaveService(event)">
+                <label>Service Name *</label>
+                <input type="text" id="serviceName" required>
+
+                <label>Price Range *</label>
+                <input type="text" id="servicePrice" placeholder="e.g., ₹500 - ₹1200" required>
+
+                <label>Description *</label>
+                <textarea id="serviceDescription" required></textarea>
+
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Save Service</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeProductModal()">&times;</span>
+            <h2 style="color: #c91c6d; margin-bottom: 1rem;">Add/Edit Product</h2>
+            <form onsubmit="handleSaveProduct(event)">
+                <label>Product Name *</label>
+                <input type="text" id="productName" required>
+
+                <label>Price *</label>
+                <input type="text" id="productPrice" placeholder="e.g., ₹450" required>
+
+                <label>Available Sizes *</label>
+                <input type="text" id="productSizes" placeholder="e.g., S, M, L, XL" required>
+
+                <label>Description *</label>
+                <textarea id="productDescription" required></textarea>
+
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentServiceId = null;
+        let currentProductId = null;
+
+        // Check login
+        function checkLogin() {
+            if (!localStorage.getItem('adminLoggedIn')) {
+                document.getElementById('loginPage').style.display = 'block';
+                document.getElementById('adminPage').style.display = 'none';
+            } else {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('adminPage').style.display = 'block';
+                loadAllData();
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'SHAKTI' && password === 'BOMB_JATT_123') {
+                localStorage.setItem('adminLoggedIn', 'true');
+                checkLogin();
+            } else {
+                alert('Invalid credentials!');
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('adminLoggedIn');
+            checkLogin();
+        }
+
+        // Services Management
+        function openServiceModal(id = null) {
+            currentServiceId = id;
+            if (id) {
+                const services = JSON.parse(localStorage.getItem('services')) || [];
+                const service = services.find(s => s.id === id);
+                document.getElementById('serviceName').value = service.name;
+                document.getElementById('servicePrice').value = service.price;
+                document.getElementById('serviceDescription').value = service.description;
+            } else {
+                document.getElementById('serviceName').value = '';
+                document.getElementById('servicePrice').value = '';
+                document.getElementById('serviceDescription').value = '';
+            }
+            document.getElementById('serviceModal').style.display = 'block';
+        }
+
+        function closeServiceModal() {
+            document.getElementById('serviceModal').style.display = 'none';
+        }
+
+        function handleSaveService(event) {
+            event.preventDefault();
+            const name = document.getElementById('serviceName').value;
+            const price = document.getElementById('servicePrice').value;
+            const description = document.getElementById('serviceDescription').value;
+
+            const defaultServices = [
+                {id: 1, name: "Indian Suit (Salwar Kameez)", price: "₹500 - ₹1200", description: "Custom tailored Indian suits with perfect fit. Choose from various fabrics and designs.", image: "👗"},
+                {id: 2, name: "Blouse Stitching", price: "₹300 - ₹600", description: "Expert blouse stitching with trendy designs. Back designs, boat neck, deep neck, etc.", image: "👚"},
+                {id: 3, name: "Saree Stitching", price: "₹400 - ₹800", description: "Professional saree stitching and fitting. We handle all types of sarees.", image: "🧣"},
+                {id: 4, name: "Alterations", price: "₹200 - ₹500", description: "Expert alterations for perfect fit. Hemming, taking in/letting out, etc.", image: "✂️"},
+                {id: 5, name: "Lehenga Stitching", price: "₹800 - ₹2000", description: "Beautiful custom lehengas for special occasions.", image: "👑"},
+                {id: 6, name: "Ethnic Wear", price: "₹600 - ₹1500", description: "Custom ethnic wear including kurtis, palazzo sets, and more.", image: "🎨"}
+            ];
+
+            let services = JSON.parse(localStorage.getItem('services')) || defaultServices;
+
+            if (currentServiceId) {
+                const index = services.findIndex(s => s.id === currentServiceId);
+                services[index] = {id: currentServiceId, name, price, description, image: services[index].image};
+            } else {
+                services.push({id: Date.now(), name, price, description, image: '👗'});
+            }
+
+            localStorage.setItem('services', JSON.stringify(services));
+            closeServiceModal();
+            loadAllData();
+            alert('Service saved successfully!');
+        }
+
+        function deleteService(id) {
+            if (confirm('Are you sure?')) {
+                let services = JSON.parse(localStorage.getItem('services')) || [];
+                services = services.filter(s => s.id !== id);
+                localStorage.setItem('services', JSON.stringify(services));
+                loadAllData();
+            }
+        }
+
+        // Products Management
+        function openProductModal(id = null) {
+            currentProductId = id;
+            if (id) {
+                const products = JSON.parse(localStorage.getItem('products')) || [];
+                const product = products.find(p => p.id === id);
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productSizes').value = product.size;
+                document.getElementById('productDescription').value = product.description;
+            } else {
+                document.getElementById('productName').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productSizes').value = '';
+                document.getElementById('productDescription').value = '';
+            }
+            document.getElementById('productModal').style.display = 'block';
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function handleSaveProduct(event) {
+            event.preventDefault();
+            const name = document.getElementById('productName').value;
+            const price = document.getElementById('productPrice').value;
+            const size = document.getElementById('productSizes').value;
+            const description = document.getElementById('productDescription').value;
+
+            const defaultProducts = [
+                {id: 1, name: "Embroidered Kurti - Red", price: "₹450", size: "S, M, L, XL", description: "Beautiful red kurti with traditional embroidery", image: "👗"},
+                {id: 2, name: "Cotton Kurti - Blue", price: "₹350", size: "S, M, L, XL", description: "Comfortable cotton kurti perfect for daily wear", image: "👕"},
+                {id: 3, name: "Printed Kurti - Green", price: "₹400", size: "S, M, L, XL", description: "Trendy printed kurti with floral design", image: "🌸"},
+                {id: 4, name: "Silk Blend Kurti - Golden", price: "₹550", size: "S, M, L, XL", description: "Premium silk blend kurti for special occasions", image: "✨"},
+                {id: 5, name: "Palazzo Set - Purple", price: "₹650", size: "S, M, L, XL", description: "Elegant palazzo set with matching dupatta", image: "👑"},
+                {id: 6, name: "Designer Kurti - Maroon", price: "₹500", size: "S, M, L, XL", description: "Designer kurti with intricate details", image: "💎"}
+            ];
+
+            let products = JSON.parse(localStorage.getItem('products')) || defaultProducts;
+
+            if (currentProductId) {
+                const index = products.findIndex(p => p.id === currentProductId);
+                products[index] = {id: currentProductId, name, price, size, description, image: products[index].image};
+            } else {
+                products.push({id: Date.now(), name, price, size, description, image: '👗'});
+            }
+
+            localStorage.setItem('products', JSON.stringify(products));
+            closeProductModal();
+            loadAllData();
+            alert('Product saved successfully!');
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Are you sure?')) {
+                let products = JSON.parse(localStorage.getItem('products')) || [];
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('products', JSON.stringify(products));
+                loadAllData();
+            }
+        }
+
+        // Load all data
+        function loadAllData() {
+            loadServices();
+            loadProducts();
+            loadBookings();
+            loadInquiries();
+        }
+
+        function loadServices() {
+            const defaultServices = [
+                {id: 1, name: "Indian Suit (Salwar Kameez)", price: "₹500 - ₹1200", description: "Custom tailored Indian suits with perfect fit. Choose from various fabrics and designs.", image: "👗"},
+                {id: 2, name: "Blouse Stitching", price: "₹300 - ₹600", description: "Expert blouse stitching with trendy designs. Back designs, boat neck, deep neck, etc.", image: "👚"},
+                {id: 3, name: "Saree Stitching", price: "₹400 - ₹800", description: "Professional saree stitching and fitting. We handle all types of sarees.", image: "🧣"},
+                {id: 4, name: "Alterations", price: "₹200 - ₹500", description: "Expert alterations for perfect fit. Hemming, taking in/letting out, etc.", image: "✂️"},
+                {id: 5, name: "Lehenga Stitching", price: "₹800 - ₹2000", description: "Beautiful custom lehengas for special occasions.", image: "👑"},
+                {id: 6, name: "Ethnic Wear", price: "₹600 - ₹1500", description: "Custom ethnic wear including kurtis, palazzo sets, and more.", image: "🎨"}
+            ];
+
+            const services = JSON.parse(localStorage.getItem('services')) || defaultServices;
+            const tbody = document.getElementById('servicesTableBody');
+            tbody.innerHTML = services.map(service => `
+                <tr>
+                    <td>${service.name}</td>
+                    <td>${service.price}</td>
+                    <td>${service.description}</td>
+                    <td>
+                        <button class="edit-btn" onclick="openServiceModal(${service.id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteService(${service.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadProducts() {
+            const defaultProducts = [
+                {id: 1, name: "Embroidered Kurti - Red", price: "₹450", size: "S, M, L, XL", description: "Beautiful red kurti with traditional embroidery", image: "👗"},
+                {id: 2, name: "Cotton Kurti - Blue", price: "₹350", size: "S, M, L, XL", description: "Comfortable cotton kurti perfect for daily wear", image: "👕"},
+                {id: 3, name: "Printed Kurti - Green", price: "₹400", size: "S, M, L, XL", description: "Trendy printed kurti with floral design", image: "🌸"},
+                {id: 4, name: "Silk Blend Kurti - Golden", price: "₹550", size: "S, M, L, XL", description: "Premium silk blend kurti for special occasions", image: "✨"},
+                {id: 5, name: "Palazzo Set - Purple", price: "₹650", size: "S, M, L, XL", description: "Elegant palazzo set with matching dupatta", image: "👑"},
+                {id: 6, name: "Designer Kurti - Maroon", price: "₹500", size: "S, M, L, XL", description: "Designer kurti with intricate details", image: "💎"}
+            ];
+
+            const products = JSON.parse(localStorage.getItem('products')) || defaultProducts;
+            const tbody = document.getElementById('productsTableBody');
+            tbody.innerHTML = products.map(product => `
+                <tr>
+                    <td>${product.name}</td>
+                    <td>${product.price}</td>
+                    <td>${product.size}</td>
+                    <td>${product.description}</td>
+                    <td>
+                        <button class="edit-btn" onclick="openProductModal(${product.id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteProduct(${product.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadBookings() {
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            const tbody = document.getElementById('bookingsTableBody');
+            tbody.innerHTML = bookings.length === 0 ? '<tr><td colspan="5" style="text-align: center;">No bookings yet</td></tr>' : bookings.map(booking => `
+                <tr>
+                    <td>${booking.name}</td>
+                    <td>${booking.phone}</td>
+                    <td>${booking.serviceType}</td>
+                    <td>Neck: ${booking.measurements.neck}, Chest: ${booking.measurements.chest}, Waist: ${booking.measurements.waist}, Hip: ${booking.measurements.hip}</td>
+                    <td>${booking.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        function loadInquiries() {
+            const inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
+            const tbody = document.getElementById('inquiriesTableBody');
+            tbody.innerHTML = inquiries.length === 0 ? '<tr><td colspan="6" style="text-align: center;">No inquiries yet</td></tr>' : inquiries.map(inquiry => `
+                <tr>
+                    <td>${inquiry.name}</td>
+                    <td>${inquiry.phone}</td>
+                    <td>${inquiry.email || '-'}</td>
+                    <td>${inquiry.service}</td>
+                    <td>${inquiry.message}</td>
+                    <td>${inquiry.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Initialize
+        checkLogin();
+    </script>
+</body>
+</html>
